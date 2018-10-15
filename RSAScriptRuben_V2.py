@@ -123,4 +123,5 @@ def main():
   print()
   test(m,mm)
 
-
+if __name__ == "__main__":
+    main()
