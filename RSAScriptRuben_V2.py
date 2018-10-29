@@ -6,24 +6,56 @@ __author__="Wylleman Ruben"
 __version__="Version 2"
 
 
+
 def inputnumbers():
   '''
   # input: manual !! prime integer value
+  # creates: global variable p (int)
+             global variable q (int)
 
   This function will take care of the input and make this input available
-  for futur functions.
+  for futur functions. 
+  It will also check the validity (integer and prime number) of the numbers put in by the user.
   '''
   global p
   global q
   print("1) Select Primes")
-  p = int(input("p = "))
-  q = int(input("q = "))
+  try:
+    p = int(input("p = "))  # we are assuming the number put in is integer and try to parse it and we will catch the error if it is not.
+  except ValueError:
+      print()
+      print("PLEASE ENTER A VALID PRIME INTEGER")
+      print()
+      inputnumbers()
+      pass
+  try:
+    q = int(input("q = ")) # we are assuming the number put in is integer and try to parse it and we will catch the error if it is not.
+  except ValueError:
+      print()
+      print("PLEASE ENTER A VALID PRIME INTEGER")
+      print()
+      inputnumbers()
+      pass
+  
+  if is_prime_number(p) == False:
+      print()
+      print("!! INTEGER p IS NOT A PRIME NUMBER !!")
+      print()
+      inputnumbers()
+  if is_prime_number(q) == False:
+      print("!! INTEGER q IS NOT A PRIME NUMBER !!")
+      print()
+      inputnumbers()
+    
+
 
 def calcmodulus(a,b):
   '''
   # input: prime a, prime b
+  # creates: global variable n
 
   this functions will calculate the modulus from 2 prime numbers
+
   '''
   global n
   n = a * b
@@ -32,6 +64,7 @@ def calcmodulus(a,b):
 def calcphi(a,b):
   '''
   # input: prime a, prime b
+  # creates: global variable phi
 
   this functions calculates the phi value from 2 prime numbers
   for RSA calculation
@@ -42,7 +75,8 @@ def calcphi(a,b):
 
 def Select_e(a):
   '''
-  #input: phi
+  # input: phi
+  # creates: global variable e
 
   this function will calculate a value for e to work with the input phi.
   '''
@@ -58,6 +92,7 @@ def Select_e(a):
 def find_d(a,b):
   '''
   # input: the value for e, the value for phi
+  # creates: global variable d
 
   this function will find a value for d to use RSA encryption
   '''
@@ -74,6 +109,7 @@ def find_d(a,b):
 def encrypt(a):
   '''
   # input: message to encrypt
+  # returns: encrypted message as string
 
   this function will encrypt a message using the generated public key and return  it's output
   '''
@@ -83,7 +119,8 @@ def encrypt(a):
 
 def decrypt(a):
   '''
-  # input: message to decrypt
+  # input: message to decrypt (string)
+  # returns: decrypted message (string)
 
   this function will decrypt the message using the private key generated 
   in this  script. the decrypted message will return as output.
@@ -103,6 +140,25 @@ def test(a,b):
   else:
     print("is m == mm ? ... ERROR, RSA code faulty")
 
+
+def is_prime_number(x):
+  if x >= 2:
+    for y in range(2,x):
+            if not ( x % y ):
+                return False
+  else:
+    return False
+  return True
+
+def check_value_m(x,mod):
+    if x > mod:
+        return False
+    else:
+
+        return True
+
+
+
 def main():
   '''
   This is the main script for the RSA calculation.
@@ -117,11 +173,17 @@ def main():
   find_d(e,phi)
   print()
   m=int(input("Select message m: "))
+  if check_value_m(m,n) == False:
+      print()
+      print("please enter a value smaller than the modulus {}" .format(n) )
+      print()
+      m=int(input("Select message m:  "))
   print()
   m_enc=encrypt(m)
   mm=decrypt(m_enc)
   print()
   test(m,mm)
+
 
 if __name__ == "__main__":
     main()
